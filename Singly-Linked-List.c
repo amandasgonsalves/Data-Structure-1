@@ -1,305 +1,605 @@
-//MANIPULAÇÃO DE LISTA SIMPLES - LINKED LIST 
+//LISTA SIMPLES
 #include <stdio.h>
 #include <stdlib.h>
 
-//=============== STRUCT ===================
-typedef struct No{
-	int dado;
-	No *link;
-}No;
+//====================================================================================
 
-//================== PROTÓTIPOS FUNÇÕES E PROCEDIMENTOS ====================
-No* criaNo(No*x, int y);
+typedef struct node{
 
-No* addNoFim(No* x, int y);
+	int data;
+	struct node *link;
 
-No* addNoInicio(No*x, int y);
+}Node;
 
-int contaNos(No* x); 
+//====================================================================================
 
-void addNoPosicao(No* x, int y, int z);
+Node *alocaNo(Node *x, int y);
 
-No* deletaPrimeiroNo(No* x);
+void imprimeLista(Node *x);
 
-No* deletaUltimoNo(No* x); //arrumar, pois está contando errado
+Node *insereFinalReturn(Node *x, int y);
 
-void deletaNoPosicao(No** x, int z);
+void insereFinalVoid(Node **x, int y);
 
-No* deletaLista(No* x);
+Node *insereInicioReturn(Node *x, int y);
 
-void imprimeLista(No* x);
+void insereInicioVoid(Node **x, int y);
 
-//===================== INT MAIN ======================
+int contaNos(Node *x);
+
+Node *deletaPrimeiroReturn(Node* x);
+
+void deletaPrimeiroVoid(Node **x);
+
+Node *deletaUltimoReturn(Node *x);
+
+void deletaUltimoVoid(Node **x);
+
+Node *addNaPosicaoReturn(Node *x, int pos, int dado);
+
+void addNaPosicaoVoid(Node *x, int pos, int dado); //único void que não precisa de pointer of pointer
+
+Node *deletaNaPosicaoReturn(Node *x, int pos);
+
+void deletaNaPosicaoVoid(Node **x, int pos);
+
+Node *deletaListaReturn(Node *x);
+
+void deletaListaVoid(Node **x);
+
+//====================================================================================
+
 int main(){
+
+	Node *head = NULL;
+
+    printf("\n-> ALOCACAO PRIMIERO NO:\n");
+	//alocando primeiro nó da lista
+	head = alocaNo(head, 8);
 	
-	//cabeça da lista, sem inicialização de conteúdo dentro do campo dado
-	No* cabeca = NULL;	
+	imprimeLista(head);
 	
-	int op, x;
+	//====================================================================================
 	
-	do{
-		printf("\n(1) - Inicializar lista\n(2) - Add no inicio\n(3) - Add no final\n(4) - Add na posicao");
-		printf("\n(5) - Deletar primeiro noh\n(6) - Deletar ultimo noh\n(7) - Deletar noh especifico");
-		printf("\n(8) - Quantidade de nohs\n(9) - Deletar lista/SAIR\n(10) - Visualizar lista");
-		scanf("%d", &op);
-		
-		switch(op){
-			case 1:{
-				int p;
-				
-				printf("\nINFORME O CONTEUDO PARA INICIALIZAR O NOH:");
-				scanf("%d", &p);
-				
-				cabeca = criaNo(cabeca, p);
-				break;
-			}
-			case 2:{
-				printf("\nINFORME O CONTEUDO DO NOH:");
-				scanf("%d", &x);
-				
-				cabeca = addNoInicio(cabeca, x);
-				break;
-			}
-			case 3:{
-				int y;
-				
-				printf("\nINFORME O CONTEUDO DO NOH:");
-				scanf("%d", &y);
-				
-				cabeca = addNoFim(cabeca, y);
-				break;
-			}
-			case 4:{
-				int k, j;
-				
-				printf("\nINFORME O CONTEUDO E POSICAO:");
-				scanf("%d %d", &k, &j);
-				
-				addNoPosicao(cabeca, k, j);
-				break;
-			}
-			case 5:{
-				cabeca = deletaPrimeiroNo(cabeca);
-				break;
-			}
-			case 6:{
-				cabeca = deletaUltimoNo(cabeca);
-				break;
-			}
-			case 7:{
-				int m;
-				
-				printf("\nINFORME A POSICAO A SER DELETADA:");
-				scanf("%d", &m);
-				
-				deletaNoPosicao(&cabeca, m);
-				break;
-			}
-			case 8:{
-				int qtd;
-				
-				qtd = contaNos(cabeca);
-				
-				printf("\nTOTAL DE NOHS = %d", qtd);
-				break;
-			}
-			case 9:{
-				cabeca = deletaLista(cabeca);
-				break;
-			}
-			case 10:{
-				imprimeLista(cabeca);
-				break;
-			}
-		}
-	}while(op!=9);
+	printf("\n-> INSERINDO NO FINAL DA LISTA:\n");
+
+	//inserindo nó na lista com uma função que RETORNA Node
+	head = insereFinalReturn(head, 7);
+	head = insereFinalReturn(head, 9);
+	head = insereFinalReturn(head, 3);
+
+	//inserindo nó na lista com uma função que é VOID e NÃO RETORNA, apenas modifica pelo endereço do ponteiro
+	insereFinalVoid(&head, 1);
+	insereFinalVoid(&head, 4);
+	insereFinalVoid(&head, 6);
+
+	//imprimindo lista para verificar modificações feitas nela
+	imprimeLista(head);
 	
+	//====================================================================================
+
+    printf("\n-> INSERINDO NO INICIO DA LISTA\n");
+
+    //inserindo no INICIO com função que RETORNA
+    head = insereInicioReturn(head, 99);
+    head = insereInicioReturn(head, 22);
+    head = insereInicioReturn(head, 88);
+
+    //inserindo no INICIO com função VOID
+    insereInicioVoid(&head, 11);
+    insereInicioVoid(&head, 62);
+    insereInicioVoid(&head, 90);
+
+    //imprimindo para verificar modificações
+    imprimeLista(head);
+
+    printf("\n-> CONTAGEM ATUAL DE NOHS = %d\n", contaNos(head));
+
+	//====================================================================================
+
+    printf("\n-> DELETANDO PRIMEIRO NOH DA LISTA:\n");
+
+    head = deletaPrimeiroReturn(head);
+    deletaPrimeiroVoid(&head);
+
+    //impressão para verificação
+    imprimeLista(head);
+
+    printf("\n-> CONTAGEM ATUAL DE NOHS = %d\n", contaNos(head));
+    
+	//====================================================================================
+
+    printf("\n-> DELETANDO ULTIMO NOH DA LISTA:\n");
+
+    head = deletaUltimoReturn(head);
+    deletaUltimoVoid(&head);
+
+    imprimeLista(head);
+
+    printf("\n-> CONTAGEM ATUAL DE NOHS = %d\n", contaNos(head));
+    
+	//====================================================================================
+	
+	printf("\n->ADICIONANDO NÓ EM DETERMINADA POSIÇÃO:\n");
+	
+	int posicao;
+	
+	//->>>>>>>>> utilizando função que retorna o ponteiro
+	
+	printf("\nInsira a posição em que deseja add o elemento:");
+	scanf("%d", &posicao);
+	
+	head = addNaPosicaoReturn(head, posicao, 186);
+	imprimeLista(head);
+	
+	//->>>>>>>>> utilizando função que NÃO retorna o ponteiro (VOID)
+	
+	printf("\nInsira a posição em que deseja add o elemento:");
+	scanf("%d", &posicao);
+	
+	addNaPosicaoReturn(head, posicao, 777);
+	imprimeLista(head);
+	
+	//====================================================================================
+	
+	printf("\n-> DELETANDO ELEMENTO DE POSIÇÃO ESPECÍFICA:\n");
+	
+	//->>>>>>>>> utilizando função que retorna o ponteiro
+	printf("\n->>> COM RETURN <<<-\n");
+	head = deletaNaPosicaoReturn(head, 8);
+	imprimeLista(head);
+	
+	//->>>>>>>>> utilizando função que NÃO retorna o ponteiro (VOID)
+	printf("\n->>> SEM RETURN <<<-\n");
+	deletaNaPosicaoVoid(&head, 6);
+	imprimeLista(head);
+	
+	//====================================================================================
+	
+	printf("\n-> DELETANDO A LISTA TODA:\n");
+	
+	int op;
+	
+	printf("(1) - COM RETURN\n(2) - SEM RETURN");
+	scanf("%d", &op);
+	
+	switch(op){
+	    
+	    case 1:{
+	        head = deletaListaReturn(head);
+	    }break;
+	    case 2:{
+	        deletaListaVoid(&head);
+	    }break;
+	}
+	
+	//o resultado deve ser lista vazia, pois foi deletado todos os elementos
+	imprimeLista(head);
+
 	return 0;
 }
 
-//====================== FUNÇÕES E PROCEDIMENTOS ======================
+//====================================================================================
 
-No* criaNo(No*x, int y){
-	
-	//se a cabeça NÃO for NULL, quer dizer que ela já contém pelo menos UM nó, então imprime a mensagem abaixo
+Node *alocaNo(Node *x, int y){
+
 	if(x){
-		printf("\nA lista ja foi incializada!");
-	}else{
-		No* temp = (No*)malloc(sizeof(No));
-		temp->dado = y;
-		temp->link = NULL;
-		x = temp;
+		printf("\nPRIMEIRO no ja foi alocado!");
+		return x;
 	}
+
+	Node *temp = x;
+
+	temp = (Node*)malloc(sizeof(Node));
+
+	if(!temp){
+        printf("\nErro na alocação do no!");
+        temp = alocaNo(temp, y);
+	}else{
+        temp->data = y;
+        temp->link = NULL;
+	}
+
+	x = temp;
+
 	return x;
+
 }
 
-No* addNoFim(No* x, int y){
-	
-	//se a cabeça for IGUAL a NULL, entãa é preciso criar um nó antes, com a função criaNo, por esse motivo é apresentada a msg abaixo
-	if(!x){
-		printf("\nEh necessario criar um nó antes de add novos nós!");
-	}else{
-		No* temp = x;
-		
-		//é necessário percorrer por toda a lista, até chegar no último nó para add um novo ao fim
-		//IMPORTANTE: quando vai percorrer a lista, PRECISA SIM colocar -> link, se não não funciona
+//====================================================================================
 
-		while(temp->link != NULL){
-			temp = temp->link;
-		}
-		
-		//criação dinâmica do novo nó que será add ao fim da lista
-		No* novoNo = (No*)malloc(sizeof(No));
-		//atribuindo valores aos campos do nó
-		novoNo->dado = y;
-		novoNo->link = NULL;
-		
-		//declarando que o campo link do PENÚLTIMO (que na verdade ainda é o último, que parou no while) nó vai receber o endereço do novo nó
-		temp->link = novoNo;
-		
-	}
-	return x;
-	
+void imprimeLista(Node *x){
+
+    if(x == NULL){
+        printf("\nLista vazia!");
+        return;
+    }
+
+    Node *temp = x;
+
+    while(temp != NULL){
+        printf("%d\n", temp->data);
+        temp = temp->link;
+    }
+
+    x = temp;
 }
 
-No* addNoInicio(No*x, int y){
-	
-	if(!x){
-		printf("\nA lista esta VAZIA!");
-	}else{
-		
-		//criando novo nó e fazendo as atribuições de valores necessárias
-		No* temp = (No*)malloc(sizeof(No));
-		temp->dado = y;
-		temp->link = NULL;
-		
-		temp->link = x;
-		
-		//por fim, x (que é a cabeça) deixa de apontar para o nó de antes e começa a ter como cabeça o nó criado agora, que foi add no início
-		x = temp;
-	}
-	return x;
-	
+//====================================================================================
+
+Node *insereFinalReturn(Node *x, int y){
+
+    if(!x){
+        printf("\nNao existe lista para add no!");
+        return x;
+    }
+
+    Node *temp = x;
+
+    while(temp->link != NULL){
+        temp = temp->link;
+    }
+
+    //novo nó
+    Node *novoNo = (Node*)malloc(sizeof(Node));
+
+    if(!novoNo){
+        printf("Nao foi possivel alocar o noh!");
+    }
+
+    novoNo->data = y;
+    novoNo->link = NULL;
+
+    //apontando o penúltimo nó para o último
+    temp->link = novoNo;
+
+    //não é necessário fazer a atribuição x = temp
+
+    return x;
 }
 
-void addNoPosicao(No* x, int y, int z){
+//====================================================================================
 
-	//verificação se a lista está vazia
-	if(!x){
-		printf("\nLista VAZIA!");
-	}else{
-		No* temp = x;
-		No* novoNo = (No*)malloc(sizeof(No));
-		novoNo->dado = y;
-		novoNo->link = NULL;
-		
-		while(z != 2){ //descontado 2 unidades para que o nó fique exatamente na posição z
-			temp = temp->link;
-			z--;
-		}
-		
-		novoNo->link = temp->link;
-		temp->link = novoNo;
-	}
+void insereFinalVoid(Node **x, int y){
+
+    if(!*x){
+        printf("\nNao existe lista para add no!");
+        return;
+    }
+
+    Node *temp = *x;
+
+    while(temp->link != NULL){
+        temp = temp->link;
+    }
+
+    //criando novo nó
+    Node *novoNo = (Node*)malloc(sizeof(Node));
+
+    if(!novoNo){
+        printf("\nNao foi possivel alocar novo no!");
+    }
+
+    novoNo->data = y;
+    novoNo->link = NULL;
+
+    temp->link = novoNo;
 }
 
-int contaNos(No* x){
-	
-	int counter = 0; 
-	
-	if(!x){
-		printf("\nNao eh possivel fazer a contagem, a lista esta VAZIA!");
-	}else{
-		No* temp = x;
-		
-		while(temp != NULL){
-			counter++;
-			temp = temp->link;
-		}
-		x = temp;	
-	}
-	
-	return counter;
+//====================================================================================
+
+Node *insereInicioReturn(Node *x, int y){
+
+    if(!x){
+        printf("\nNao existe lista para add no!");
+        return x;
+    }
+
+    //nó temporario para x
+    Node *temp = x;
+
+    Node *novoNo = (Node*)malloc(sizeof(Node));
+
+    if(!novoNo){
+        printf("\nNao foi possivel alocar o novo no!");
+    }
+
+    novoNo->data = y;
+    novoNo->link = NULL;
+    novoNo->link = temp;
+
+    x = novoNo;
+
+    return x;
 }
 
-No* deletaPrimeiroNo(No* x){
-	
-	if(!x){
-		printf("\nLista Vazia, nao ha no para deletar!");
-	}else{
-		No* temp = x->link;
-		
-		free(x);
-		x = NULL;
-		
-		x = temp;
-	}
-	return x;
+//====================================================================================
+
+void insereInicioVoid(Node **x, int y){
+
+    if(!*x){
+        printf("\nNao existe lista para add no!");
+    }
+
+    Node *temp = *x;
+
+    //alocando novo No
+    Node *novoNo =(Node*)malloc(sizeof(Node));
+
+    if(!novoNo){
+        printf("\nNao foi possivel alocar o novo no!");
+    }
+
+    novoNo->data = y;
+    novoNo->link = NULL;
+    novoNo->link = temp;
+
+    *x = novoNo;
 }
 
-No* deletaUltimoNo(No* x){
-	
-	if(!x){
-		printf("\nLista Vazia, nao eh possivel deletar no");
-	}else{
-		No* temp = x;
-		
-		while(temp->link != NULL){
-			temp = temp->link;
+//====================================================================================
 
-		}
-			
-	}
+int contaNos(Node *x){
+
+    if(!x){
+        return 0;
+    }
+
+    Node *temp = x;
+    int counter = 0;
+
+    while(temp != NULL){
+        counter++;
+        temp = temp->link;
+    }
+
+    return counter;
 }
 
-No* deletaLista(No* x){
-	
-	if(!x){
-		printf("\nLista Vazia, nao eh possivel deletar a mesma");
-	}else{
-		No* temp = x;
-		No* aux = NULL;
-		
-		while(temp != NULL){
-			temp = temp->link;
-			free(x);
-			x = temp;
-		}	
-	}
-	return x;
+//====================================================================================
+
+Node *deletaPrimeiroReturn(Node* x){
+
+    if(!x){
+        printf("\nNao existe lista para deletar no!");
+        return x;
+    }
+
+    //nó temporário recebe o endereço do segundo nó da lista
+    Node *temp = x->link;
+
+    //liberando/deletando primeiro nó da lista
+    free(x);
+    x = NULL;
+
+    //devolvendo a nova lista para x
+    x = temp;
+
+    return x;
 }
 
-void deletaNoPosicao(No** x, int z){
-	
-	if(!*x){
-		printf("\nLista vazia, nao eh possivel deletar esse no");
-	}else{
-		No* temp = *x;
-		No* temp2 = *x;
-		
-		while(z != 1){
-			temp = temp2;
-			temp2 = temp2->link;
-			z--;
-		}
-			
-		temp->link = temp2->link;
-		free(temp2);
-		temp2 = NULL;	
-	}
+//====================================================================================
+
+void deletaPrimeiroVoid(Node **x){
+
+    if(!*x){
+        printf("\nNao existe lista para deletar no!");
+        return;
+    }
+
+    Node *temp = (*x)->link;
+
+    free(*x);
+    *x = NULL;
+
+    *x = temp;
 }
 
-void imprimeLista(No* x){
-	
-	if(!x){
-		printf("\nLista Vazia!");
-	}else{
-		No* temp = x;
-		
-		printf("\n");
-		while(temp != NULL){
-			printf("%d\t", temp->dado);
-			temp = temp->link;
-		}
-	}
+//====================================================================================
+
+Node *deletaUltimoReturn(Node *x){
+
+    if(!x){
+        printf("\nNao existe lista para deletar no!");
+        return x;
+    }
+
+    Node *temp = x;
+
+    while(temp->link->link != NULL){
+        temp = temp->link;
+    }
+
+    free(temp->link);
+    temp->link = NULL;
+
+    return x;
+}
+
+//====================================================================================
+
+void deletaUltimoVoid(Node **x){
+
+    if(!*x){
+        printf("\nNao existe lista para deletar no!");
+        return;
+    }
+
+    Node *temp = *x;
+
+    while(temp->link->link != NULL){
+        temp = temp->link;
+    }
+
+    free(temp->link);
+    temp->link = NULL;
+}
+
+//====================================================================================
+
+Node *addNaPosicaoReturn(Node *x, int pos, int dado){
+    
+    if(!x){
+        printf("\nNao existe lista para add no!");
+        return x;
+    }
+    
+    if(pos > contaNos(x)){
+        printf("\nA posicao excede a quantidade de nós da lista!\n");
+        return x;
+    }
+    
+    Node *temp = x;
+    
+    //alocando o nó antes de adicionar ele na determinada posição da lista
+    Node *novoNo = (Node*)malloc(sizeof(Node));
+    novoNo->data = dado;
+    novoNo->link = NULL;
+   
+    pos--;
+    
+    do{
+        pos--;
+        temp = temp->link;
+        
+    }while(pos != 1);
+    
+    //o link do novoNo vai receber o restante da lista que o do..while nem chegou a passar
+    novoNo->link = temp->link;
+    
+    temp->link = novoNo;
+    
+    return x;
+}
+
+//====================================================================================
+
+void addNaPosicaoVoid(Node *x, int pos, int dado){
+    
+    if(!x){
+        printf("\nNao existe lista para adicionar elemento!\n");
+        return;
+    }
+    
+    if(pos > contaNos(x)){
+        printf("\nA posicao excede a quantidade de nós da lista!\n");
+        return;
+    }
+    
+    Node *temp = x;
+    
+    //alocando novo nó antes de adicioná-lo na lista
+    Node *novoNo = (Node*)malloc(sizeof(Node));
+    novoNo->data = dado;
+    novoNo->link = NULL;
+    
+    pos--;
+    
+    do{
+        pos--;
+        temp = temp->link;
+    }while(pos != 2);
+    
+    novoNo->link = temp->link;
+    temp->link = novoNo;
+    
+}
+
+//====================================================================================
+
+Node *deletaNaPosicaoReturn(Node *x, int pos){
+    
+    if(!x){
+        printf("\nNao existe lista para remover elemento!\n");
+        return x;
+    }
+    
+    if(pos > contaNos(x)){
+        printf("\nA posicao excede a quantidade de nós da lista!\n");
+        return x;
+    }
+    
+    Node *atual = x;
+    Node *posterior = x;
+    
+    do{
+        
+        posterior = atual;
+        atual = atual->link;
+        pos--;
+        
+    }while(pos != 1);
+    
+    posterior->link = atual->link;
+    free(atual);
+    atual = NULL;
+    
+    return x;
+}
+
+//====================================================================================
+
+void deletaNaPosicaoVoid(Node **x, int pos){
+    
+    if(!*x){
+        printf("\nNao existe lista para remover elemento!\n");
+        return;
+    }
+    
+    if(pos > contaNos(*x)){
+        printf("\nA posicao excede a quantidade de nós da lista!\n");
+        return;
+    }
+    
+    Node *atual = *x;
+    Node *posterior = *x;
+    
+    do{
+        posterior = atual;
+        atual = atual->link;
+        pos--;
+        
+    }while(pos != 1);
+    
+    posterior->link = atual->link;
+    free(atual);
+    atual = NULL;
+}
+
+//====================================================================================
+
+Node *deletaListaReturn(Node *x){
+    
+    if(!x){
+        printf("\nA lista ja esta vazia!");
+        return x;
+    }
+    
+    Node *temp = x;
+    
+    while(temp!= NULL){
+        temp = temp->link;
+        free(x);
+        x = temp;
+    }
+    
+    return x;
+}
+
+//====================================================================================
+
+void deletaListaVoid(Node **x){
+    
+    if(!*x){
+        printf("\nA lista ja esta vazia!");
+        return;
+    }
+    
+    Node *temp = *x;
+    
+    while(temp != NULL){
+        temp = temp->link;
+        free(*x);
+        *x = temp;
+    }
 }
